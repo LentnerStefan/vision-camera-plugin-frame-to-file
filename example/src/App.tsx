@@ -6,6 +6,7 @@ import {
   useCameraDevice,
   useCameraPermission,
   useFrameProcessor,
+  runAtTargetFps,
 } from 'react-native-vision-camera';
 
 export default function App() {
@@ -25,8 +26,11 @@ export default function App() {
 
   const fakeFrameProcessor = useFrameProcessor((frame) => {
     'worklet';
-    const test = lol.toFile(frame);
-    console.log(test);
+    runAtTargetFps(1, () => {
+      'worklet';
+      const test = lol.toFile(frame);
+      console.log('filepath', test);
+    });
   }, []);
 
   if (!hasCameraPermission) {

@@ -10880,6 +10880,8 @@ __metadata:
     babel-plugin-module-resolver: ^5.0.0
     react: 18.2.0
     react-native: 0.74.1
+    react-native-vision-camera: ^4.0.3
+    react-native-worklets-core: ^1.3.2
   languageName: unknown
   linkType: soft
 
@@ -10903,14 +10905,50 @@ __metadata:
     react: 18.2.0
     react-native: 0.74.1
     react-native-builder-bob: ^0.23.2
+    react-native-vision-camera: ^4.0.3
+    react-native-worklets-core: ^1.3.2
     release-it: ^15.0.0
     turbo: ^1.10.7
     typescript: ^5.2.2
   peerDependencies:
     react: "*"
     react-native: "*"
+    react-native-vision-camera: ^4.0.3
+    react-native-worklets-core: ^1.3.2
   languageName: unknown
   linkType: soft
+
+"react-native-vision-camera@npm:^4.0.3":
+  version: 4.0.4
+  resolution: "react-native-vision-camera@npm:4.0.4"
+  peerDependencies:
+    "@shopify/react-native-skia": "*"
+    react: "*"
+    react-native: "*"
+    react-native-reanimated: "*"
+    react-native-worklets-core: "*"
+  peerDependenciesMeta:
+    "@shopify/react-native-skia":
+      optional: true
+    react-native-reanimated:
+      optional: true
+    react-native-worklets-core:
+      optional: true
+  checksum: 2738f53260faf438e962ba797d3db369fd90ac5ee908947c05040d8a9c79664949c675b331bbb7aed69f56eb52f807e490b9252f0fb1508f8dc67b21a69e9f41
+  languageName: node
+  linkType: hard
+
+"react-native-worklets-core@npm:^1.3.2":
+  version: 1.3.3
+  resolution: "react-native-worklets-core@npm:1.3.3"
+  dependencies:
+    string-hash-64: ^1.0.3
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: bf2f0eb5852ac1e4f58e20fd5912bed46c0f2bd5a671dadb596b7edf2aa5816874c694f472adaaefdb9ef19e5355c05ceb2877946bfaa0cd081c9cc0c95aa404
+  languageName: node
+  linkType: hard
 
 "react-native@npm:0.74.1":
   version: 0.74.1
@@ -12032,6 +12070,13 @@ __metadata:
   dependencies:
     internal-slot: ^1.0.4
   checksum: d04173690b2efa40e24ab70e5e51a3ff31d56d699550cfad084104ab3381390daccb36652b25755e420245f3b0737de66c1879eaa2a8d4fc0a78f9bf892fcb42
+  languageName: node
+  linkType: hard
+
+"string-hash-64@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "string-hash-64@npm:1.0.3"
+  checksum: 79de8431b4fa3e85a2429cd52a34f7948221ff167b7a094e05d6bcfd0173474b232e0c9845c96f74b0d7b6b0c8bbe2c3532a4cacb21635293ef0cf3cc8e77f06
   languageName: node
   linkType: hard
 

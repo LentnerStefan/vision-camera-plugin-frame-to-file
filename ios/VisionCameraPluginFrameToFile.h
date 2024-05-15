@@ -1,12 +1,12 @@
+//
+//  VisionCameraPluginFrameToFile_h.h
+//  Pods
+//
+//  Created by Stef on 2024/5/15.
+//
 
-#ifdef RCT_NEW_ARCH_ENABLED
-#import "RNVisionCameraPluginFrameToFileSpec.h"
+#ifndef VisionCameraPluginFrameToFile_h
+#define VisionCameraPluginFrameToFile_h
 
-@interface VisionCameraPluginFrameToFile : NSObject <NativeVisionCameraPluginFrameToFileSpec>
-#else
-#import <React/RCTBridgeModule.h>
 
-@interface VisionCameraPluginFrameToFile : NSObject <RCTBridgeModule>
-#endif
-
-@end
+#endif /* VisionCameraPluginFrameToFile_h */

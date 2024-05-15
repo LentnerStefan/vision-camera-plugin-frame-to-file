@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-vision-camera-plugin-frame-to-file';
+import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
 import {
   Camera,
   useCameraDevice,
@@ -11,9 +11,7 @@ import {
 export default function App() {
   const device = useCameraDevice('back');
 
-  React.useEffect(() => {
-    multiply(3, 7).then((result) => console.log(result));
-  }, []);
+  const lol = useToFilePlugin();
 
   const {
     hasPermission: hasCameraPermission,
@@ -25,9 +23,10 @@ export default function App() {
     await requestCameraPermission();
   };
 
-  const fakeFrameProcessor = useFrameProcessor((_frame) => {
+  const fakeFrameProcessor = useFrameProcessor((frame) => {
     'worklet';
-    console.log('hey');
+    const test = lol.toFile(frame);
+    console.log(test);
   }, []);
 
   if (!hasCameraPermission) {

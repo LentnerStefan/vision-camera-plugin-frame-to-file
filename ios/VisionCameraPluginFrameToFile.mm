@@ -1,19 +1,28 @@
-#import "VisionCameraPluginFrameToFile.h"
+#import <VisionCamera/FrameProcessorPlugin.h>
+#import <VisionCamera/FrameProcessorPluginRegistry.h>
+#import <VisionCamera/Frame.h>
 
-@implementation VisionCameraPluginFrameToFile
-RCT_EXPORT_MODULE()
+@interface ToFileFrameProcessorPlugin : FrameProcessorPlugin
+@end
 
-// Example method
-// See // https://reactnative.dev/docs/native-modules-ios
-RCT_EXPORT_METHOD(multiply:(double)a
-                  b:(double)b
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-    NSNumber *result = @(a * b);
-
-    resolve(result);
+@implementation ToFileFrameProcessorPlugin{
+    VisionCameraProxyHolder* _proxy;
 }
 
+- (instancetype)initWithProxy:(VisionCameraProxyHolder*)proxy withOptions:(NSDictionary*)options {
+  if (self = [super initWithProxy:proxy withOptions:options]) {
+    _proxy = proxy;
+  }
+  return self;
+}
+
+- (id)callback:(Frame*)frame withArguments:(NSDictionary*)arguments {
+  CMSampleBufferRef buffer = frame.buffer;
+  UIImageOrientation orientation = frame.orientation;
+  // code goes here
+  return @"cat";
+}
+
+VISION_EXPORT_FRAME_PROCESSOR(ToFileFrameProcessorPlugin, toFile)
 
 @end

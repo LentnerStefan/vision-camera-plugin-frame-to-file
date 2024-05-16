@@ -8,11 +8,20 @@ import {
   useFrameProcessor,
   runAtTargetFps,
 } from 'react-native-vision-camera';
+import { useResizePlugin, type Options } from 'vision-camera-resize-plugin';
+
+type PixelFormat = Options<'uint8'>['pixelFormat'];
+
+const WIDTH = 480;
+const HEIGHT = 640;
+const TARGET_TYPE = 'uint8' as const;
+const TARGET_FORMAT: PixelFormat = 'rgb';
 
 export default function App() {
   const device = useCameraDevice('back');
-
-  const lol = useToFilePlugin();
+  const { resize } = useResizePlugin();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { toFile: _toFile } = useToFilePlugin();
 
   const {
     hasPermission: hasCameraPermission,
@@ -28,8 +37,20 @@ export default function App() {
     'worklet';
     runAtTargetFps(1, () => {
       'worklet';
-      const test = lol.toFile(frame);
-      console.log('filepath', test);
+      const startResize = performance.now();
+      const resizedFrame = resize(frame, {
+        dataType: TARGET_TYPE,
+        pixelFormat: TARGET_FORMAT,
+        scale: {
+          width: WIDTH,
+          height: HEIGHT,
+        },
+      });
+      const timeToResize = Math.round(performance.now() - startResize);
+      console.log(
+        `Frame resized from ${frame.width}x${frame.height} to ${resizedFrame.byteLength / HEIGHT / 3}x${resizedFrame.byteLength / WIDTH / 3} in ${timeToResize}ms`
+      );
+      // const filePath = toFile(frame);
     });
   }, []);
 

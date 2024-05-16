@@ -1,7 +1,7 @@
 #import <VisionCamera/FrameProcessorPlugin.h>
 #import <VisionCamera/FrameProcessorPluginRegistry.h>
 #import <VisionCamera/Frame.h>
-#import "ImageSaver.h"
+#import "ToFileHelper.h"
 
 
 @interface ToFileFrameProcessorPlugin : FrameProcessorPlugin
@@ -27,8 +27,8 @@
     CIImage *ciImage = [CIImage imageWithCVImageBuffer:imageBuffer];
     UIImage *image = [UIImage imageWithCIImage:ciImage scale:1.0 orientation:orientation];
 
-    // Call saveImage method from ImageSaver
-    NSString *savedImagePath = [ImageSaver saveImage:image];
+    // Call toFile method from ToFileHelper
+    NSString *savedImagePath = [ToFileHelper toFile:image];
 
     // Return the saved image path or handle the result as needed
     if (savedImagePath) {

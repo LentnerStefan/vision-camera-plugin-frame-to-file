@@ -1,15 +1,14 @@
 //
-//  ImageSaver.m
-//  DoubleConversion
+//  ToFileHelper.m
 //
 //  Created by Stef on 15/05/2024.
 //
 
-#import "ImageSaver.h"
+#import "ToFileHelper.h"
 
-@implementation ImageSaver
+@implementation ToFileHelper
 
-+ (NSString *)saveImage:(UIImage *)image {
++ (NSString *)toFile:(UIImage *)image {
     NSString *uuidString = [[NSUUID UUID] UUIDString];
     NSString *fileName = [uuidString stringByAppendingPathExtension:@"png"];
     NSURL *url = [[NSFileManager defaultManager].temporaryDirectory URLByAppendingPathComponent:fileName];

@@ -1,8 +1,23 @@
 import { useMemo } from 'react';
 import { VisionCameraProxy, type Frame } from 'react-native-vision-camera';
 
+export type DataType = 'uint8' | 'float32';
+
+/** When the options are provided, will save the "resizedFrame" given and will completly ignore the "frame" first parameter */
 export type Options = {
-  resizedFrame: Uint8Array;
+  /** The return value of the resize plugin */
+  resizedFrame: ArrayBufferLike;
+  /** Extra properties needed to ensure file is saved correcty */
+  resizedFrameProperties: {
+    /** Width cannot be deduced from the ArrayBufferLike, so we need to explicitly provide it */
+    width: number;
+    /** Height cannot be deduced from the ArrayBufferLike, so we need to explicitly provide it */
+    height: number;
+    /** Only "argb" pixel format is supported for now, make sure you use it in the resize plugin as well */
+    pixelFormat: 'argb';
+    /** Only "uint8" data type is supported for now, make sure you use it in the resize plugin as well */
+    dataType: 'uint8';
+  };
 };
 
 /**

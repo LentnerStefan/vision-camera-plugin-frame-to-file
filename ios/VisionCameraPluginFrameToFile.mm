@@ -2,34 +2,28 @@
 #import <VisionCamera/FrameProcessorPluginRegistry.h>
 #import <VisionCamera/Frame.h>
 #import <VisionCamera/SharedArray.h>
-#import <vision-camera-resize-plugin/FrameBuffer.h>
 #import "ToFileHelper.h"
-
 
 @interface ToFileFrameProcessorPlugin : FrameProcessorPlugin
 @end
 
-@implementation ToFileFrameProcessorPlugin{
+@implementation ToFileFrameProcessorPlugin {
     VisionCameraProxyHolder* _proxy;
 }
 
 - (instancetype)initWithProxy:(VisionCameraProxyHolder*)proxy withOptions:(NSDictionary*)options {
-  if (self = [super initWithProxy:proxy withOptions:options]) {
-    _proxy = proxy;
-  }
-  return self;
+    if (self = [super initWithProxy:proxy withOptions:options]) {
+        _proxy = proxy;
+    }
+    return self;
 }
 
 - (id)callback:(Frame*)frame withArguments:(NSDictionary*)arguments {
-    CMSampleBufferRef buffer = frame.buffer;
-    UIImageOrientation orientation = frame.orientation;
-    
-    
     // Extract `resizedFrame` from arguments and cast it to SharedArray
-    FrameBuffer *resizedFrame = [arguments objectForKey:@"resizedFrame"];
-    
-    
-    if (![resizedFrame isKindOfClass:[FrameBuffer class]]) {
+    SharedArray *resizedFrame = [arguments objectForKey:@"resizedFrame"];
+
+    // If no resizedFrame is given, save the main frame to Disk
+    if (![resizedFrame isKindOfClass:[SharedArray class]]) {
         CMSampleBufferRef buffer = frame.buffer;
         UIImageOrientation orientation = frame.orientation;
 
@@ -49,23 +43,62 @@
             return @"Error saving image";
         }
     }
-    
-    
-    
-    // New logic using smallFrame.data
-    uint8_t *data = (uint8_t *)resizedFrame.sharedArray.data;
+
+    // Extract the `resizedFrameProperties` from arguments and cast it to NSDictionary
+    NSDictionary* resizedFrameProperties = arguments[@"resizedFrameProperties"];
+
+    // Extract the data from the frame
+    uint8_t *data = (uint8_t *)resizedFrame.data;
+    size_t dataLength = resizedFrame.size;
+
+    // Log data information
+    if (data && dataLength > 0) {
+        NSLog(@"Data length: %zu", dataLength);
+        // Log the first few bytes of the data
+        size_t logBytes = MIN(dataLength, 10);
+        NSMutableString *dataPreview = [NSMutableString stringWithString:@"Data preview: "];
+        for (size_t i = 0; i < logBytes; i++) {
+            [dataPreview appendFormat:@"%02x ", data[i]];
+        }
+        NSLog(@"%@", dataPreview);
+    } else {
+        NSLog(@"Error: Data is empty or null.");
+        return @"Error: Data is empty or null.";
+    }
 
     if (data) {
-        size_t width = resizedFrame.width;
-        size_t height =  resizedFrame.height;
-        size_t bitsPerComponent = resizedFrame.bytesPerChannel * 8;
-        size_t bytesPerRow = resizedFrame.width * resizedFrame.bytesPerPixel;
+        NSNumber *widthNumber = resizedFrameProperties[@"width"];
+        NSNumber *heightNumber = resizedFrameProperties[@"height"];
+
+        size_t width = widthNumber.unsignedLongValue;
+        size_t height = heightNumber.unsignedLongValue;
+
+        // Number of bits per component (RGBA = 4 components, 8 bits each = 32 bits total)
+        size_t bitsPerComponent = 8;
+        // Number of bytes per pixel (RGBA = 4 bytes per pixel)
+        size_t bytesPerPixel = 4;
+        // Number of bytes per row (width * bytes per pixel)
+        size_t bytesPerRow = width * bytesPerPixel;
+
+        // Log the parameters being passed to CGContextCreate
+        NSLog(@"Creating context with width: %zu, height: %zu, bitsPerComponent: %zu, bytesPerRow: %zu, colorSpace: DeviceRGB", width, height, bitsPerComponent, bytesPerRow);
 
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        CGContextRef context = CGBitmapContextCreate(data, width, height, bitsPerComponent, bytesPerRow, colorSpace, kCGBitmapByteOrder32Big | kCGImageAlphaPremultipliedLast);
+        CGContextRef context = CGBitmapContextCreate(data, width, height, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedFirst);
+        
+        if (!context) {
+            CGColorSpaceRelease(colorSpace);
+            return @"Error: Could not create context.";
+        }
+        
         CGImageRef imageRef = CGBitmapContextCreateImage(context);
+        if (!imageRef) {
+            CGContextRelease(context);
+            CGColorSpaceRelease(colorSpace);
+            return @"Error: Could not create image.";
+        }
+        
         UIImage *image = [UIImage imageWithCGImage:imageRef];
-
         CGColorSpaceRelease(colorSpace);
         CGContextRelease(context);
         CGImageRelease(imageRef);

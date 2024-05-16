@@ -7,14 +7,18 @@ import {
   useCameraPermission,
   useFrameProcessor,
   runAtTargetFps,
+  useCameraFormat,
 } from 'react-native-vision-camera';
 import { useResizePlugin } from 'vision-camera-resize-plugin';
 import { useRunOnJS } from 'react-native-worklets-core';
+import { getCenteredSquare, type Rectangle } from './utils';
 
 const { height } = Dimensions.get('window');
 
 // Toggle this to save the whole frame to disk or the resized frame
 const SAVE_RESIZED_FRAME = true;
+// Toggle this to enable the cropping of the frame to a centered square
+const CROP_TO_SQUARE = true;
 
 const RESIZE_FACTOR = 4;
 
@@ -24,9 +28,33 @@ const TARGET_FORMAT = 'argb' as const;
 export default function App() {
   const device = useCameraDevice('back');
   const [path, setPath] = React.useState<string | null>(null);
-  const { resize } = useResizePlugin();
+  const [cropSquare, setCropSquare] = React.useState<Rectangle | null>(null);
 
+  const { resize } = useResizePlugin();
   const { toFile } = useToFilePlugin();
+
+  const format = useCameraFormat(device, [
+    {
+      videoResolution: 'max',
+    },
+    // We ideally want max fps, so  QR detection algorithm can run as fast as possible
+    { fps: 'max' },
+  ]);
+
+  React.useEffect(() => {
+    if (!format || !CROP_TO_SQUARE) return;
+
+    setCropSquare(
+      getCenteredSquare(
+        Math.min(format.videoWidth, format.videoHeight) / RESIZE_FACTOR,
+        {
+          // inverted because format specified in landscape
+          width: format.videoHeight,
+          height: format.videoWidth,
+        }
+      )
+    );
+  }, [format]);
 
   const updatePathFromFrameProcessor = useRunOnJS((newPath: string) => {
     setPath(newPath);
@@ -37,7 +65,6 @@ export default function App() {
     requestPermission: requestCameraPermission,
   } = useCameraPermission();
 
-  // Triggers the opening of the device settings if the user denies the permission request.
   const handleCameraPermissionRequest = async () => {
     await requestCameraPermission();
   };
@@ -56,23 +83,40 @@ export default function App() {
           const timeToSaveToDisk = Math.round(
             performance.now() - startSaveToDisk
           );
-          console.log(`Frame saved to disk in ${timeToSaveToDisk}ms;`);
+          console.log(`Full frame saved to disk in ${timeToSaveToDisk}ms;`);
           updatePathFromFrameProcessor(filePath);
           return;
         }
         // Or save the resized frame
 
-        const targetDimensions = {
-          width: frame.width / RESIZE_FACTOR,
-          height: frame.height / RESIZE_FACTOR,
-        };
+        const resizeConfiguration =
+          CROP_TO_SQUARE && !!cropSquare
+            ? {
+                dataType: TARGET_TYPE,
+                pixelFormat: TARGET_FORMAT,
+                scale: {
+                  width: cropSquare.width,
+                  height: cropSquare.height,
+                },
+                crop: {
+                  x: cropSquare.x,
+                  y: cropSquare.y,
+                  width: cropSquare.width,
+                  height: cropSquare.height,
+                },
+              }
+            : {
+                dataType: TARGET_TYPE,
+                pixelFormat: TARGET_FORMAT,
+                scale: {
+                  width: frame.width / RESIZE_FACTOR,
+                  height: frame.height / RESIZE_FACTOR,
+                },
+              };
 
         const startResize = performance.now();
-        const resizedFrame = resize(frame, {
-          dataType: TARGET_TYPE,
-          pixelFormat: TARGET_FORMAT,
-          scale: targetDimensions,
-        });
+
+        const resizedFrame = resize(frame, resizeConfiguration);
 
         const timeToResize = Math.round(performance.now() - startResize);
         const startSaveToDisk = performance.now();
@@ -80,8 +124,8 @@ export default function App() {
         const filePath = toFile(frame, {
           resizedFrame: resizedFrame.buffer,
           resizedFrameProperties: {
-            width: targetDimensions.width,
-            height: targetDimensions.height,
+            width: resizeConfiguration.scale.width,
+            height: resizeConfiguration.scale.height,
             dataType: TARGET_TYPE,
             pixelFormat: TARGET_FORMAT,
           },
@@ -90,7 +134,7 @@ export default function App() {
           performance.now() - startSaveToDisk
         );
         console.log(
-          `Frame resized from ${frame.width}x${frame.height} to ${targetDimensions.width}x${targetDimensions.height} in ${timeToResize}ms; Saved to disk in ${timeToSaveToDisk}ms;`
+          `Frame ${CROP_TO_SQUARE ? 'cropped' : 'resized'} from ${frame.width}x${frame.height} to ${resizeConfiguration.scale.width}x${resizeConfiguration.scale.height} in ${timeToResize}ms; Saved to disk in ${timeToSaveToDisk}ms;`
         );
         updatePathFromFrameProcessor(filePath);
       });
@@ -108,7 +152,8 @@ export default function App() {
       </View>
     );
   }
-  if (!device) return null;
+
+  if (!device || !format) return null;
 
   return (
     <View style={StyleSheet.absoluteFill}>
@@ -117,6 +162,7 @@ export default function App() {
         enableFpsGraph
         isActive
         device={device}
+        format={format}
         frameProcessor={fakeFrameProcessor}
         resizeMode="contain"
       />
@@ -124,7 +170,14 @@ export default function App() {
         {path !== null && (
           <Image
             source={{ uri: `file://${path}` }}
-            style={styles.filePreview}
+            style={{
+              ...styles.filePreview,
+              aspectRatio: !SAVE_RESIZED_FRAME
+                ? format.videoHeight / format.videoWidth
+                : cropSquare
+                  ? cropSquare.height / cropSquare.width
+                  : 1,
+            }}
             resizeMode="contain"
           />
         )}
@@ -150,7 +203,6 @@ const styles = StyleSheet.create({
   },
   filePreview: {
     height: height / 3.5,
-    aspectRatio: 9 / 16,
     borderWidth: 2,
     borderColor: '#CECFD1',
     borderRadius: 8,

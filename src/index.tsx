@@ -1,11 +1,15 @@
 import { useMemo } from 'react';
 import { VisionCameraProxy, type Frame } from 'react-native-vision-camera';
 
+export type Options = {
+  resizedFrame: Uint8Array;
+};
+
 /**
  * An instance of the toFile plugin.
  */
 export interface ToFilePlugin {
-  toFile(frame: Frame): string;
+  toFile(frame: Frame, options?: Options): string;
 }
 
 function createToFilePlugin() {
@@ -13,14 +17,14 @@ function createToFilePlugin() {
 
   if (toFilePlugin == null) {
     throw new Error(
-      'Cannot find vision-camera-plugin-to-frame! Did you install the native dependency properly?'
+      'Cannot find react-native-vision-camera-plugin-frame-to-file! Did you install the native dependency properly?'
     );
   }
 
   return {
-    toFile: (frame: Frame): string => {
+    toFile: (frame: Frame, options?: Options): string => {
       'worklet';
-      const result = toFilePlugin.call(frame) as string;
+      const result = toFilePlugin.call(frame, options ?? {}) as string;
       return result;
     },
   };

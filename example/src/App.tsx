@@ -20,8 +20,8 @@ const TARGET_FORMAT: PixelFormat = 'rgb';
 export default function App() {
   const device = useCameraDevice('back');
   const { resize } = useResizePlugin();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { toFile: _toFile } = useToFilePlugin();
+
+  const { toFile } = useToFilePlugin();
 
   const {
     hasPermission: hasCameraPermission,
@@ -46,11 +46,14 @@ export default function App() {
           height: HEIGHT,
         },
       });
+
       const timeToResize = Math.round(performance.now() - startResize);
+      const startSaveToDisk = performance.now();
+      const filePath = toFile(frame, { resizedFrame });
+      const timeToSaveToDisk = Math.round(performance.now() - startSaveToDisk);
       console.log(
-        `Frame resized from ${frame.width}x${frame.height} to ${resizedFrame.byteLength / HEIGHT / 3}x${resizedFrame.byteLength / WIDTH / 3} in ${timeToResize}ms`
+        `Frame resized from ${frame.width}x${frame.height} to ${resizedFrame.byteLength / HEIGHT / 3}x${resizedFrame.byteLength / WIDTH / 3} in ${timeToResize}ms; saved to disk in ${timeToSaveToDisk}ms;\nSaved to: ${filePath}`
       );
-      // const filePath = toFile(frame);
     });
   }, []);
 
@@ -70,6 +73,7 @@ export default function App() {
     <View style={StyleSheet.absoluteFill}>
       <Camera
         style={styles.camera}
+        enableFpsGraph
         isActive
         device={device}
         frameProcessor={fakeFrameProcessor}

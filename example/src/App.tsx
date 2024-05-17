@@ -17,8 +17,6 @@ const { height } = Dimensions.get('window');
 
 // Toggle this to save the whole frame to disk or the resized frame
 const SAVE_RESIZED_FRAME = true;
-// Toggle this to enable the cropping of the frame to a centered square
-const CROP_TO_SQUARE = true;
 
 const RESIZE_FACTOR = 4;
 
@@ -26,6 +24,9 @@ const TARGET_TYPE = 'uint8' as const;
 const TARGET_FORMAT = 'argb' as const;
 
 export default function App() {
+  // Toggle this to enable the cropping of the frame to a centered square, needs SAVE_RESIZED_FRAME to be true
+  const CROP_TO_SQUARE = true;
+
   const device = useCameraDevice('back');
   const [path, setPath] = React.useState<string | null>(null);
   const [cropSquare, setCropSquare] = React.useState<Rectangle | null>(null);
@@ -54,7 +55,7 @@ export default function App() {
         }
       )
     );
-  }, [format]);
+  }, [format, CROP_TO_SQUARE]);
 
   const updatePathFromFrameProcessor = useRunOnJS((newPath: string) => {
     setPath(newPath);

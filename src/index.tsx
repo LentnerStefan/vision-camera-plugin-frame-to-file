@@ -5,8 +5,8 @@ export type DataType = 'uint8' | 'float32';
 
 /** When the options are provided, will save the "resizedFrame" given and will completly ignore the "frame" first parameter */
 export type Options = {
-  /** The return value of the resize plugin */
-  resizedFrame: ArrayBufferLike;
+  /** The buffer of the resized frame returned by the resize plugin */
+  resizedFrameBuffer: ArrayBufferLike;
   /** Extra properties needed to ensure file is saved correcty */
   resizedFrameProperties: {
     /** Width cannot be deduced from the ArrayBufferLike, so we need to explicitly provide it */

@@ -94,7 +94,6 @@ export default function App() {
   const fakeFrameProcessor = useFrameProcessor(
     (frame) => {
       'worklet';
-
       // Save the whole frame to disk
       if (!resizeFrame) {
         const startSaveToDisk = performance.now();
@@ -125,7 +124,7 @@ export default function App() {
         const startSaveToDisk = performance.now();
 
         const filePath = toFile(frame, {
-          resizedFrame: resizedFrame.buffer,
+          resizedFrameBuffer: resizedFrame.buffer,
           resizedFrameProperties: {
             width: resizeOptions.scale.width,
             height: resizeOptions.scale.height,
@@ -167,7 +166,7 @@ export default function App() {
 
       const startSaveToDisk = performance.now();
       const filePath = toFile(frame, {
-        resizedFrame: resizedFrame.buffer,
+        resizedFrameBuffer: resizedFrame.buffer,
         resizedFrameProperties: {
           width: resizeOptions.scale.width,
           height: resizeOptions.scale.height,

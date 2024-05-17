@@ -16,11 +16,11 @@
     NSData *imageData = UIImagePNGRepresentation(image);
     NSError *error = nil;
     [imageData writeToURL:url options:NSDataWritingAtomic error:&error];
-
     if (error) {
-        NSLog(@"Error saving image: %@", error.localizedDescription);
+        @throw [NSException exceptionWithName:@"ImageSaveException"
+                                       reason:[NSString stringWithFormat:@"Error saving image: %@", error.localizedDescription]
+                                     userInfo:@{NSUnderlyingErrorKey: error}];
     }
-
     return url.path;
 }
 @end

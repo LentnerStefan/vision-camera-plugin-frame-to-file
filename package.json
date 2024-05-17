@@ -1,6 +1,6 @@
 {
   "name": "react-native-vision-camera-plugin-frame-to-file",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "react-native-vision-camera frame processor to save a frame to a file",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

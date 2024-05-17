@@ -237,6 +237,7 @@ export default function App() {
             ios_backgroundColor="#3e3e3e"
             onValueChange={handleSetCropToSquare}
             value={cropToSquare}
+            disabled={!resizeFrame}
           />
         </View>
       </View>

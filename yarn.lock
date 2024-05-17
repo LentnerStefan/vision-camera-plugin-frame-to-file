@@ -10914,8 +10914,8 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-    react-native-vision-camera: ^4.0.3
-    react-native-worklets-core: ^1.3.2
+    react-native-vision-camera: ">=4.0.1"
+    react-native-worklets-core: ">=1.2.0"
   languageName: unknown
   linkType: soft
 

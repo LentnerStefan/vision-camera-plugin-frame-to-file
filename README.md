@@ -61,7 +61,7 @@ const frameProcessor = useFrameProcessor((frame) => {
     },
   });
   const filePath = toFile(frame, {
-    resizedFrame: resizedFrame.buffer,
+    resizedFrameBuffer: resizedFrame.buffer,
     resizedFrameProperties: {
       width: frame.width / RESIZE_FACTOR,
       height: frame.height / RESIZE_FACTOR,
@@ -113,7 +113,7 @@ const frameProcessor = useFrameProcessor((frame) => {
     },
   });
   const filePath = toFile(frame, {
-    resizedFrame: resizedFrame.buffer,
+    resizedFrameBuffer: resizedFrame.buffer,
     resizedFrameProperties: {
       width: cropSquare.width,
       height: cropSquare.height,

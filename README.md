@@ -8,6 +8,28 @@ A [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-c
 npm install react-native-vision-camera-plugin-frame-to-file
 ```
 
+## Demo 
+
+ <img align="right" style="margin-right='40px'" height="400" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/78a56858-6aa9-49ca-93eb-91cceca4b804">
+
+This demo was recorded on an iPhone 11. Format is `3024x4032@30fps`.
+
+The bottom left square continuously displays the last saved frame.
+
+<br/><br/>
+<br/><br/>
+
+- Without resizing the frame, it runs at around **1 fps**.
+- When resizing the frame, it runs at around **8 fps**.
+- When cropping the frame, it runs at around **23 fps**.
+
+<br/><br/>
+<br/><br/>
+
+
+
+
+
 ## Saved file format
 
 The frame is saved as a PNG file. Support for JPEG might come later on.
@@ -73,7 +95,7 @@ const frameProcessor = useFrameProcessor((frame) => {
 }, []);
 ```
 
-### Saving a resized/cropped frame using [vision-camera-resize-plugin's cropping feature](https://github.com/mrousavy/vision-camera-resize-plugin?tab=readme-ov-file#cropping)
+### Saving a cropped frame using [vision-camera-resize-plugin's cropping feature](https://github.com/mrousavy/vision-camera-resize-plugin?tab=readme-ov-file#cropping)
 
 > [!IMPORTANT]
 > - You still have to provide the `frame` as a first parameter, but it will be ignored. [Idea came from this issue](https://github.com/mrousavy/vision-camera-resize-plugin/issues/38#issuecomment-1930466136)

@@ -1,6 +1,6 @@
 # react-native-vision-camera-plugin-frame-to-file
 
-react-native-vision-camera frame processor to save a frame to a file
+A [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-camera) frame processor to save a frame to a file. Can be used to send frames to a server performing some remote image processing.
 
 ## Installation
 
@@ -10,15 +10,15 @@ npm install react-native-vision-camera-plugin-frame-to-file
 
 ## Saved file format
 
-The frame is saved as a PNG file, I'll add support for JPEG later on.
-
-## Pixel format & data type
-
-When saving a resized frame, only `uint8` data type, and `argb` are working right now. This means you have to use these for the resize plugin as well!
-
-**These limitations do not apply when saving the entire frame**
+The frame is saved as a PNG file. Support for JPEG might come later on.
 
 ## Usage
+
+> [!WARNING]
+> - Only **IOS** is supported for now !
+> - Saving an entire 3024x4032 frame produces a heavy files **~10/20mb**. Consider using [`runAtTargetFps`](https://react-native-vision-camera.com/docs/api/#runattargetfps)
+> - Saving resized/cropped frames in combination with [react-native-resize-plugin](https://github.com/mrousavy/vision-camera-resize-plugin) can also be a good idea. **However only the `uint8` dataFormat & `argb` pixel format are supported.**
+
 
 ### Saving the full frame
 
@@ -29,22 +29,21 @@ import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file
 const frameProcessor = useFrameProcessor((frame) => {
   'worklet';
   const filePath = toFile(frame);
+  // Do something with the saved file's path
   console.log(filePath);
 }, []);
 ```
 
-### Saving a resized frame
+### Saving a resized frame using [react-native-resize-plugin](https://github.com/mrousavy/vision-camera-resize-plugin)
 
-You can use this plugin in combination with [vision-camera-resize-plugin](https://github.com/mrousavy/vision-camera-resize-plugin).
-In order to save the resized frame, you have to provide it to the options of the `toFile`.
-⚠️ You still have to provide the `frame` as a first parameter, but it will be ignored. [Idea came from this issue](https://github.com/mrousavy/vision-camera-resize-plugin/issues/38#issuecomment-1930466136)
+> [!IMPORTANT]
+> - You still have to provide the `frame` as a first parameter, but it will be ignored. [Idea came from this issue](https://github.com/mrousavy/vision-camera-resize-plugin/issues/38#issuecomment-1930466136)
 
 ```js
 import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
 import { useResizePlugin } from 'vision-camera-resize-plugin';
 
 // ...
-
 const RESIZE_FACTOR = 4;
 const TARGET_TYPE = 'uint8' as const;
 const TARGET_FORMAT = 'argb' as const;
@@ -69,20 +68,21 @@ const frameProcessor = useFrameProcessor((frame) => {
       pixelFormat: TARGET_FORMAT,
     },
   });
+  // Do something with the saved file's path
   console.log(filePath);
 }, []);
 ```
 
-### Saving a resized/cropped frame
+### Saving a resized/cropped frame using [vision-camera-resize-plugin's cropping feature](https://github.com/mrousavy/vision-camera-resize-plugin?tab=readme-ov-file#cropping)
 
-You can also leverage vision-camera-resize-plugin's [cropping feature](https://github.com/mrousavy/vision-camera-resize-plugin?tab=readme-ov-file#cropping)
+> [!IMPORTANT]
+> - You still have to provide the `frame` as a first parameter, but it will be ignored. [Idea came from this issue](https://github.com/mrousavy/vision-camera-resize-plugin/issues/38#issuecomment-1930466136)
 
 ```js
 import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
 import { useResizePlugin } from 'vision-camera-resize-plugin';
 
 // ...
-
 const RESIZE_FACTOR = 4;
 const TARGET_TYPE = 'uint8' as const;
 const TARGET_FORMAT = 'argb' as const;
@@ -121,6 +121,7 @@ const frameProcessor = useFrameProcessor((frame) => {
       pixelFormat: TARGET_FORMAT,
     },
   });
+  // Do something with the saved file's path
   console.log(filePath);
 }, []);
 ```
@@ -145,12 +146,6 @@ const frameProcessor = useFrameProcessor((frame) => {
 | iPhone 11  | Iphone 13 Pro |
 | ------------- | ------------- |
 | <img width="534" alt="Screenshot 2024-05-20 at 13 57 28" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/699b5a7e-3676-44b2-bb57-92e66377c96c">  | <img width="534" alt="Screenshot 2024-05-20 at 12 13 16" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/55413ea1-5091-4302-9e2c-8c015915111e">  |
-
-
-
-
-
-
 
 ## Contributing
 

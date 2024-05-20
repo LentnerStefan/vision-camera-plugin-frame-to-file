@@ -131,20 +131,23 @@ const frameProcessor = useFrameProcessor((frame) => {
 
 | iPhone 11  | Iphone 13 Pro |
 | ------------- | ------------- |
-| Content Cell  | <img width="316" alt="Screenshot 2024-05-20 at 12 09 52" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/ad01ff53-4288-4c30-9983-84adabb74806">  |
+| <img width="325" alt="Screenshot 2024-05-20 at 13 55 54" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/d618485b-b806-4c8c-ac84-47d159152437">  | <img width="316" alt="Screenshot 2024-05-20 at 12 09 52" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/ad01ff53-4288-4c30-9983-84adabb74806">  |
 
 
 ### Saving the resized frame
 
 | iPhone 11  | Iphone 13 Pro |
 | ------------- | ------------- |
-| Content Cell  | <img width="547" alt="Screenshot 2024-05-20 at 12 11 09" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/5fb306ca-388e-4158-bb99-0aa218bdc038">  |
+| <img width="548" alt="Screenshot 2024-05-20 at 13 57 01" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/27148275-791f-43e6-9d25-cffef942be25">  | <img width="547" alt="Screenshot 2024-05-20 at 12 11 09" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/5fb306ca-388e-4158-bb99-0aa218bdc038">  |
 
 ### Saving a resized/cropped frame
 
 | iPhone 11  | Iphone 13 Pro |
 | ------------- | ------------- |
-| Content Cell  | <img width="534" alt="Screenshot 2024-05-20 at 12 13 16" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/55413ea1-5091-4302-9e2c-8c015915111e">  |
+| <img width="534" alt="Screenshot 2024-05-20 at 13 57 28" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/699b5a7e-3676-44b2-bb57-92e66377c96c">  | <img width="534" alt="Screenshot 2024-05-20 at 12 13 16" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/55413ea1-5091-4302-9e2c-8c015915111e">  |
+
+
+
 
 
 

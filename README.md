@@ -37,7 +37,7 @@ const frameProcessor = useFrameProcessor((frame) => {
 
 You can use this plugin in combination with [vision-camera-resize-plugin](https://github.com/mrousavy/vision-camera-resize-plugin).
 In order to save the resized frame, you have to provide it to the options of the `toFile`.
-⚠️ You still have to provide the `frame` as a first parameter, but it will be ignore. [Idea came from this issue](https://github.com/mrousavy/vision-camera-resize-plugin/issues/38#issuecomment-1930466136)
+⚠️ You still have to provide the `frame` as a first parameter, but it will be ignored. [Idea came from this issue](https://github.com/mrousavy/vision-camera-resize-plugin/issues/38#issuecomment-1930466136)
 
 ```js
 import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
@@ -73,7 +73,7 @@ const frameProcessor = useFrameProcessor((frame) => {
 }, []);
 ```
 
-### Saving a resized and cropped frame
+### Saving a resized/cropped frame
 
 You can also leverage vision-camera-resize-plugin's [cropping feature](https://github.com/mrousavy/vision-camera-resize-plugin?tab=readme-ov-file#cropping)
 
@@ -127,7 +127,27 @@ const frameProcessor = useFrameProcessor((frame) => {
 
 ## Performance
 
-TODO: Add my own benchmarking.
+### Saving the full frame
+
+| iPhone 11  | Iphone 13 Pro |
+| ------------- | ------------- |
+| Content Cell  | <img width="316" alt="Screenshot 2024-05-20 at 12 09 52" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/ad01ff53-4288-4c30-9983-84adabb74806">  |
+
+
+### Saving the resized frame
+
+| iPhone 11  | Iphone 13 Pro |
+| ------------- | ------------- |
+| Content Cell  | <img width="547" alt="Screenshot 2024-05-20 at 12 11 09" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/5fb306ca-388e-4158-bb99-0aa218bdc038">  |
+
+### Saving a resized/cropped frame
+
+| iPhone 11  | Iphone 13 Pro |
+| ------------- | ------------- |
+| Content Cell  | <img width="534" alt="Screenshot 2024-05-20 at 12 13 16" src="https://github.com/LentnerStefan/vision-camera-plugin-frame-to-file/assets/18282455/55413ea1-5091-4302-9e2c-8c015915111e">  |
+
+
+
 
 ## Contributing
 

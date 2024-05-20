@@ -38,7 +38,7 @@ The frame is saved as a PNG file. Support for JPEG might come later on.
 
 > [!WARNING]
 > - Only **IOS** is supported for now !
-> - Saving an entire 3024x4032 frame produces a heavy files **~10/20mb**. Consider using [`runAtTargetFps`](https://react-native-vision-camera.com/docs/api/#runattargetfps)
+> - Saving an entire 3024x4032 frame produces a heavy file **~10/20mb**. Consider using [`runAtTargetFps`](https://react-native-vision-camera.com/docs/api/#runattargetfps).
 > - Saving resized/cropped frames in combination with [react-native-resize-plugin](https://github.com/mrousavy/vision-camera-resize-plugin) can also be a good idea. **However only the `uint8` dataFormat & `argb` pixel format are supported.**
 
 
@@ -46,6 +46,9 @@ The frame is saved as a PNG file. Support for JPEG might come later on.
 
 ```js
 import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
+
+// ...
+const { toFile } = useToFilePlugin();
 
 // ...
 const frameProcessor = useFrameProcessor((frame) => {
@@ -64,6 +67,10 @@ const frameProcessor = useFrameProcessor((frame) => {
 ```js
 import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
 import { useResizePlugin } from 'vision-camera-resize-plugin';
+
+// ...
+const { toFile } = useToFilePlugin();
+const { resize } = useResizePlugin();
 
 // ...
 const RESIZE_FACTOR = 4;
@@ -103,6 +110,10 @@ const frameProcessor = useFrameProcessor((frame) => {
 ```js
 import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
 import { useResizePlugin } from 'vision-camera-resize-plugin';
+
+// ...
+const { toFile } = useToFilePlugin();
+const { resize } = useResizePlugin();
 
 // ...
 const RESIZE_FACTOR = 4;

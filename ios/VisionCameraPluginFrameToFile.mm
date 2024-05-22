@@ -2,7 +2,7 @@
 #import <VisionCamera/FrameProcessorPluginRegistry.h>
 #import <VisionCamera/Frame.h>
 #import <VisionCamera/SharedArray.h>
-#import "ToFileHelper.h"
+#import "FrameToFileUtils.h"
 
 @interface ToFileFrameProcessorPlugin : FrameProcessorPlugin
 @end
@@ -36,12 +36,10 @@
         UIImage *image = [UIImage imageWithCIImage:ciImage scale:1.0 orientation:orientation];
         
         // Call toFile method from ToFileHelper
-        NSString *savedImagePath = [ToFileHelper toFile:image];
+        NSString *savedImagePath = [FrameToFileUtils toFile:image];
         return savedImagePath;
     }
     
-    // Options are given, verify their validity first
-
     // Verify validity of `resizedFrameBuffer`
     if (resizedFrameBuffer == nil || ![resizedFrameBuffer isKindOfClass:[SharedArray class]]) {
         @throw [NSException exceptionWithName:@"InvalidTypeException" reason:@"resizedFrameBuffer is either nil or not of type SharedArray" userInfo:nil];
@@ -103,7 +101,7 @@
     CGImageRelease(imageRef);
 
     // Call toFile method from ToFileHelper
-    NSString *savedImagePath = [ToFileHelper toFile:image];
+    NSString *savedImagePath = [FrameToFileUtils toFile:image];
     return savedImagePath;
 }
 

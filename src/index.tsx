@@ -1,5 +1,23 @@
 import { useMemo } from 'react';
+import { NativeModules, Platform } from 'react-native';
 import { VisionCameraProxy, type Frame } from 'react-native-vision-camera';
+
+const LINKING_ERROR =
+  `The package 'react-native-vision-camera-plugin-frame-to-file' doesn't seem to be linked. Make sure: \n\n` +
+  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
+  '- You rebuilt the app after installing the package\n' +
+  '- You are not using Expo Go\n';
+
+const FrametoFileUtils = NativeModules.FrameToFileUtils
+  ? NativeModules.FrameToFileUtils
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      }
+    );
 
 export type DataType = 'uint8' | 'float32';
 
@@ -50,4 +68,12 @@ function createToFilePlugin() {
  */
 export function useToFilePlugin(): ToFilePlugin {
   return useMemo(() => createToFilePlugin(), []);
+}
+
+/**
+ * Clears out the temporary directory where the frame files are saved.
+ * @returns The number of files deleted.
+ */
+export function clearTemporaryDirectory(): Promise<number> {
+  return FrametoFileUtils.clearTemporaryDirectory();
 }

@@ -4,14 +4,18 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --device \"Jaylo iPhone 11\"",
     "start": "react-native start",
     "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
     "build:ios": "cd ios && xcodebuild -workspace VisionCameraPluginFrameToFileExample.xcworkspace -scheme VisionCameraPluginFrameToFileExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
+    "@react-native-community/hooks": "^3.0.0",
     "react": "18.2.0",
-    "react-native": "0.74.1"
+    "react-native": "0.74.1",
+    "react-native-vision-camera": "^4.0.3",
+    "react-native-worklets-core": "^1.3.2",
+    "vision-camera-resize-plugin": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -20,10 +24,7 @@
     "@react-native/babel-preset": "0.74.83",
     "@react-native/metro-config": "0.74.83",
     "@react-native/typescript-config": "0.74.83",
-    "babel-plugin-module-resolver": "^5.0.0",
-    "react-native-vision-camera": "^4.0.3",
-    "react-native-worklets-core": "^1.3.2",
-    "vision-camera-resize-plugin": "^3.1.0"
+    "babel-plugin-module-resolver": "^5.0.0"
   },
   "engines": {
     "node": ">=18"

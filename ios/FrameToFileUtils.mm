@@ -46,6 +46,14 @@ RCT_EXPORT_METHOD(clearTemporaryDirectory:(RCTPromiseResolveBlock)resolve
     NSURL *subfolderURL = [[NSFileManager defaultManager].temporaryDirectory URLByAppendingPathComponent:kSubfolderName];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
+    
+    // Check if the subfolder exists
+    if (![[NSFileManager defaultManager] fileExistsAtPath:subfolderURL.path]) {
+        NSLog(@"Subfolder does not exist (yet?).");
+        resolve(@(0));
+        return;
+    }
+    
     NSArray<NSURL *> *subfolderContents = [fileManager contentsOfDirectoryAtURL:subfolderURL
                                                     includingPropertiesForKeys:nil
                                                                        options:NSDirectoryEnumerationSkipsHiddenFiles

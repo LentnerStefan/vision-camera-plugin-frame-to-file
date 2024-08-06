@@ -1,11 +1,11 @@
 package com.visioncamerapluginframetofile;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.YuvImage;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.camera.core.ImageProxy;
 
 import com.facebook.react.bridge.Promise;
@@ -24,16 +24,17 @@ public class FrameToFileUtils extends ReactContextBaseJavaModule {
   private static final String TAG = "FrameToFileUtils";
   private static final String SUBFOLDER_NAME = "frame_files";
 
-  public FrameToFileUtils(ReactApplicationContext reactContext) {
+  FrameToFileUtils(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 
+  @NonNull
   @Override
   public String getName() {
     return "FrameToFileUtils";
   }
 
-  private Bitmap imageProxyToBitmap(ImageProxy image) {
+  private static Bitmap imageProxyToBitmap(ImageProxy image) {
     ByteBuffer yBuffer = image.getPlanes()[0].getBuffer();
     ByteBuffer uBuffer = image.getPlanes()[1].getBuffer();
     ByteBuffer vBuffer = image.getPlanes()[2].getBuffer();
@@ -55,11 +56,11 @@ public class FrameToFileUtils extends ReactContextBaseJavaModule {
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
   }
 
-  public String toFile(Context context, ImageProxy image) throws IOException {
+  public String toFile(ImageProxy image) throws IOException {
     String uuidString = UUID.randomUUID().toString();
     String fileName = uuidString + ".png";
 
-    File subfolder = new File(context.getCacheDir(), SUBFOLDER_NAME);
+    File subfolder = new File(this.getReactApplicationContext().getCacheDir(), SUBFOLDER_NAME);
 
     // Create subfolder if it doesn't exist
     if (!subfolder.exists()) {
@@ -81,7 +82,7 @@ public class FrameToFileUtils extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void clearTemporaryDirectory(Promise promise) {
-    File subfolder = new File(getReactApplicationContext().getCacheDir(), SUBFOLDER_NAME);
+    File subfolder = new File(this.getReactApplicationContext().getCacheDir(), SUBFOLDER_NAME);
     if (!subfolder.exists()) {
       Log.i(TAG, "Subfolder does not exist (yet?).");
       promise.resolve(0);

@@ -34,7 +34,7 @@ public class FrameToFileUtils extends ReactContextBaseJavaModule {
     return "FrameToFileUtils";
   }
 
-  private static Bitmap imageProxyToBitmap(ImageProxy image) {
+  private Bitmap imageProxyToBitmap(ImageProxy image) {
     ByteBuffer yBuffer = image.getPlanes()[0].getBuffer();
     ByteBuffer uBuffer = image.getPlanes()[1].getBuffer();
     ByteBuffer vBuffer = image.getPlanes()[2].getBuffer();
@@ -56,7 +56,44 @@ public class FrameToFileUtils extends ReactContextBaseJavaModule {
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
   }
 
-  public String toFile(ImageProxy image) throws IOException {
+  private Bitmap byteBufferToBitmap(ByteBuffer buffer, int width, int height) {
+    // Create a Bitmap.Config.ARGB_8888 bitmap
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+    // Rewind the buffer to the beginning
+    buffer.rewind();
+
+    // Fill the bitmap with the data from the buffer
+    bitmap.copyPixelsFromBuffer(buffer);
+
+    return bitmap;
+  }
+
+  public String byteBufferToFile(ByteBuffer buffer, int width, int height) throws IOException {
+    String uuidString = UUID.randomUUID().toString();
+    String fileName = uuidString + ".png";
+
+    File subfolder = new File(this.getReactApplicationContext().getCacheDir(), SUBFOLDER_NAME);
+
+    // Create subfolder if it doesn't exist
+    if (!subfolder.exists()) {
+      boolean success = subfolder.mkdirs();
+      if (!success) {
+        throw new IOException("Error creating directory");
+      }
+    }
+
+    File file = new File(subfolder, fileName);
+    FileOutputStream fos = new FileOutputStream(file);
+
+    Bitmap bitmap = byteBufferToBitmap(buffer, width, height);
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+    fos.close();
+
+    return file.getAbsolutePath();
+  }
+
+  public String imageProxyTofile(ImageProxy image) throws IOException {
     String uuidString = UUID.randomUUID().toString();
     String fileName = uuidString + ".png";
 

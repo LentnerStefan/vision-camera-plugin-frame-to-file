@@ -1,7 +1,7 @@
 import { useFrameProcessor } from 'react-native-vision-camera';
 import { useToFilePlugin } from 'react-native-vision-camera-plugin-frame-to-file';
 import { useResizePlugin } from 'vision-camera-resize-plugin';
-import { TARGET_TYPE, TARGET_FORMAT, RESIZE_FACTOR } from './contants';
+import { TARGET_TYPE, TARGET_FORMAT, RESIZE_FACTOR } from './constants';
 
 export const useResizedFrameToFileProcessor = (
   onPathUpdated: (path: string) => void

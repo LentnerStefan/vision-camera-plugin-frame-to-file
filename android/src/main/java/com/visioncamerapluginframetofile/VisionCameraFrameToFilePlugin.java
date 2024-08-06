@@ -17,6 +17,4 @@ public class VisionCameraFrameToFilePlugin extends FrameProcessorPlugin {
   public Boolean callback(@NonNull Frame frame, @Nullable Map<String, Object> arguments) {
     return null;
   }
-
-
 }

@@ -10,6 +10,7 @@ import com.mrousavy.camera.frameprocessors.FrameProcessorPluginRegistry;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 public class VisionCameraPluginFrameToFilePackage implements ReactPackage {
   static {
@@ -19,7 +20,9 @@ public class VisionCameraPluginFrameToFilePackage implements ReactPackage {
   @NonNull
   @Override
   public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
-    return Collections.emptyList();
+    List<NativeModule> modules = new ArrayList<>();
+    modules.add(new FrameToFileUtils(reactContext));
+    return modules;
   }
 
   @NonNull

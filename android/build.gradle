@@ -83,5 +83,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation project(':react-native-vision-camera')
+  // Camera core to access Image proxy definition
+  implementation "androidx.camera:camera-core:1.3.3"
 }
 

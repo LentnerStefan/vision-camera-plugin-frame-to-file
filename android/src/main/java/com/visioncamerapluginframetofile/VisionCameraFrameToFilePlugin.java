@@ -30,7 +30,9 @@ public class VisionCameraFrameToFilePlugin extends FrameProcessorPlugin {
     try {
       if (arguments == null || arguments.isEmpty()) {
         ImageProxy imgProxy = frame.getImageProxy();
-        return frameToFileUtils.imageProxyTofile(imgProxy);
+        String imagePath = frameToFileUtils.imageProxyToFile(imgProxy);
+        imgProxy.close();
+        return imagePath;
       }
 
       if (!arguments.containsKey("resizedFrameBuffer") || !arguments.containsKey("resizedFrameProperties")) {
